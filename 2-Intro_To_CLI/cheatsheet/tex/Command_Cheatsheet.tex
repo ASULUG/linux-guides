@@ -1,0 +1,130 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,lmargin=0.25in,rmargin=0.25in,tmargin=0.5in,bmargin=0.25in]{geometry}
+\usepackage{fancyhdr}           % Headers and footers
+\usepackage[usenames, dvipsnames]{color}    % Colored code
+\usepackage{xcolor}             % Custom colors
+\usepackage{lmodern}            % Code/command font
+\usepackage{listings}           % Code listings
+\usepackage{hyperref}           % URLs
+\usepackage{multicol}           % Multiple columns
+\usepackage[explicit]{titlesec}
+
+\definecolor{light-gray}{gray}{0.85}    % Stack Exchange grey
+\definecolor{sectioncolor}{rgb}{0, 0, 0.75}
+\definecolor{subsectioncolor}{rgb}{0.2, 0.4, 0.8}
+
+\lstset
+{
+    basicstyle=\ttfamily,
+    breaklines=true,
+    backgroundcolor=\color{light-gray},
+    numbers=left,
+    numberstyle=\tiny,
+    numbersep=5pt,
+    escapeinside={(*}{*)}
+}
+
+% Custom code commands
+\newcommand{\cmd}[1]{\texttt{\textbf{#1}}}
+
+\title{Bash Cheatsheet}
+\author{Devon Bautista}
+
+\begin{document}
+%\thispagestyle{fancy}
+\begin{center}
+    \Huge{Bash Cheatsheet}
+\end{center}
+\begin{multicols}{2}
+[
+]
+\section{Navigation}
+\begin{itemize}
+	\item \cmd{ls} | ``list storage"; list files in current directory
+	\item \cmd{pwd} | ``print working directory"; print absolute path to your current working directory
+	\item \cmd{cd} | ``change directory"; change your working directory
+	\item \cmd{pushd <dir>} | put \cmd{<dir>} on the directory stack (save current dir, change to \cmd{<dir>})
+	\item \cmd{popd} | change directory to last dir in directory stack and ``pop" it from the stack
+	\item \cmd{file <file>} | prints file information (e.g. type of file) of \cmd{<file>}
+	\item \cmd{locate <file/dir>} | search for file on system using filename or part of filename
+	\item \cmd{sudo updatedb} | update \cmd{locate} database
+	\item \cmd{which <cmd>} | display path to program that executes when \cmd{<cmd>} is run
+	\item \cmd{history} | display list of recently used commands
+\end{itemize}
+
+\section{Getting Help}
+\begin{itemize}
+	\item \cmd{whatis <cmd>} | print out a short description of \cmd{<cmd>}
+	\item \cmd{apropos <search\_term>} | print a list of commands relating to \cmd{search\_term>}
+	\item \cmd{man <cmd>} | display the manual page for \cmd{<cmd>}
+\end{itemize}
+
+\section{Files and Directories}
+\begin{itemize}
+	\item \cmd{mkdir <dirname>} | create a directory
+	\item \cmd{touch <filename>} | create empty file or update modification timestamp of existing file
+	\item \cmd{cp <src> <dst>} | copy a file/directory (\cmd{-r} for directories)
+	\item \cmd{mv <src> <dst>} | move a file/directory and/or rename it
+	\item \cmd{rm <file/dir>} | delete a file/directory (\cmd{-r} for directories, \cmd{-f} to ignore errors and not ask)
+	\item \cmd{rmdir <dirname>} | delete an empty directory
+\end{itemize}
+
+\section{Text Files}
+\begin{itemize}
+	\item \cmd{cat [file ...]} | ``catenate"; print the contents of each \cmd{file} (if given) or stdin (if not given) to stdout (terminal output)
+	\item \cmd{more <file>} | paginate \cmd{<file>}; cannot go back in pager
+	\item \cmd{less <file>} | paginate \cmd{<file>}; more features/flexibility than \cmd{more}
+	\item \cmd{nano [file]} | edit \cmd{file} (if provided) or open new file (if not provided)
+	\item \texttt{grep <pattern> [file]} | search for \texttt{<pattern>} in \texttt{[file]} if specified, stdin if not
+\end{itemize}
+
+\section{Users}
+\begin{itemize}
+	\item \texttt{sudo <cmd>} | ``switch user do"; execute \texttt{<cmd>} as a different user (by default, \textbf{root})
+	\item \texttt{sudo su} | Switch to another user as root
+	\item \texttt{sudo -s} | become root using the invoking user's shell
+	\item \texttt{su \texttt{<user>}} | become \texttt{<user>}, but don't change your environment (home directory, etc.)
+	\item \texttt{su - \texttt{<user>}} | become \texttt{<user>} while changing to login environment of \texttt{<user>}; (change to their home directory)
+	\item \texttt{users} | display a list of currently logged-in users
+	\item \texttt{who} | display information about logged-in users
+	\item \texttt{whoami} | print effective user ID (current user)
+	\item \texttt{last} | show a list of last logged in users
+	\item \texttt{w} | see who is logged in and what they are doing
+	\item \texttt{id} | print real/effective group/user ids (prints entry from \texttt{/etc/passwd})
+\end{itemize}
+
+\section{File Permissions}
+\begin{itemize}
+	\item \textbf{Files:}
+	\begin{itemize}
+		\item \textbf{r} | allows the affected user to read file contents
+		\item \textbf{w} | allows the affected user to create, rename, or delete file
+		\item \textbf{x} | allows the affected user to execute file
+	\end{itemize}
+	\item \textbf{Directories:}
+	\begin{itemize}
+		\item \textbf{r} | allows the affected user to list the files within the directory
+		\item \textbf{w} | allows the affected user to create, rename, or delete files within the directory, and modify the directory's attributes
+		\item \textbf{x} | allows the affected user to enter the directory, and access files and directories inside
+	\end{itemize}
+	\item \texttt{chmod} | ``change mode"; change permissions of file
+	\begin{itemize}
+		\item \texttt{chmod +x <file>} | symbolic way
+		\item \texttt{chmod 755 <file>} | numeric way
+		\item 755: common for directories and executable files
+		\item 644: common for non-executable files
+	\end{itemize}
+\end{itemize}
+
+\section{Processes}
+\begin{itemize}
+	\item \texttt{watch <cmd>} | run \texttt{<cmd>} and view output every (by default) 2 seconds
+	\item \texttt{pgrep <name/pattern>} | look up process(es) \texttt{<name/pattern>} and return its/their process ID (PID)
+	\item \texttt{kill <pid>} | kill the process identified by \texttt{<pid>}
+	\item \texttt{killall <name>} | kill any process(es) with exact match \texttt{<name>}
+	\item \texttt{ps} | list a selection of current running processes by your user
+	\item \texttt{ps aux} | list all running processes
+\end{itemize}
+\end{multicols}
+\end{document}
